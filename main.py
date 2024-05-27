@@ -26,7 +26,6 @@ currentListToSort =[]
 
 # Bool toggles to check if there is currently data being sorted, and if the 
 # data is already sorted (used for checking during binary search)
-global isDataSorted, isCurrentlySortingData
 isDataSorted = False
 isCurrentlySortingData = False
 
@@ -37,7 +36,7 @@ def Main():
     and creates the rectangle data and integer list
     """
     # Creating a list of ints
-    CreateIntList(60, randomIntList)
+    CreateIntList(60)
     # Creating the frames
     gui.CreateRootFrame()
     gui.CreateMainFrame()
@@ -53,6 +52,27 @@ def Main():
     button_functions.GrabCurrentListToSort(currentListToSort[0])
     gui.rootFrame[0].mainloop()
     
+
+
+def SetDataSortedBool(trueOrFalse:int):
+    global isDataSorted
+    
+    if trueOrFalse == 0:
+        isDataSorted = False
+    else:
+        isDataSorted = True
+        
+    button_functions.GrabDataBools(isDataSorted, isCurrentlySortingData)
+        
+def SetCurrentlySortingDataBool(trueOrFalse:int):
+    global isCurrentlySortingData
+    
+    if trueOrFalse == 0:
+        isCurrentlySortingData = False
+    else:
+        isCurrentlySortingData = True
+        
+    button_functions.GrabDataBools(isDataSorted, isCurrentlySortingData)
 
 
 class SortList:
@@ -72,13 +92,13 @@ class SortList:
             Arguments:
             int(number): This is used as the index count for its recursion
         """
-        # Setting the bool toggles to global so they can be changed inside this method
-        global isDataSorted, isCurrentlySortingData
+
         # Grabbing the list from this SortList object
         listForSorting = self.listToSort
 
         # We are currently sorting the data, toggle bool True
-        isCurrentlySortingData = True
+        SetCurrentlySortingDataBool(1)
+        button_functions.GrabDataBools(isDataSorted, isCurrentlySortingData)
         
         # If the index number is greater or equal to the length of the list, the search is complete
         if number >= len(listForSorting) - 1:
@@ -87,9 +107,10 @@ class SortList:
             #def PerformRainbow(textToDisplay, currentRectanglesOnScreen:list, buttonsOnScreen:list, labelsOnScreen:list, userInputButton:list, sendMessageLabel: list, mainFrame, index = 0):
             data.PerformRainbow("SELECTION SORT FINISHED!", rectangles.currentRectanglesOnScreen, gui.buttonsOnScreen, gui.labelsOnScreen, gui.userInputButton, message_system.messageLabel, gui.currentlyDisplayedMainFrame[0])
             # Reset the sorting data bool
-            isCurrentlySortingData = False
+            SetCurrentlySortingDataBool(0)
             # The data is now sorted, set to True
-            isDataSorted = True
+            SetDataSortedBool(1)
+            button_functions.GrabDataBools(isDataSorted, isCurrentlySortingData)
             return  
 
         # Setting the curMin to be the current index
@@ -110,6 +131,7 @@ class SortList:
         highlight_values = [listForSorting[index] for index in highlight_indices]
         # Recreating the rectangles, and highlighting the current rectangles that had been swapped
         rectangles.GrabCurrentListToSort(currentListToSort[0])
+        data.GrabCurrentListToSort(currentListToSort[0])
         rectangles.UpdateRectangleFrames(highlight_values + highlight_indices)
 
         # Recursive loop, runs after 1/2 of a second, recalling this method
@@ -125,13 +147,15 @@ class SortList:
         """
         global isDataSorted, isCurrentlySortingData
         listForSorting = self.listToSort
-        isCurrentlySortingData = True
+        SetCurrentlySortingDataBool(1)
+        button_functions.GrabDataBools(isDataSorted, isCurrentlySortingData)
 
         if currentIndex >= len(listForSorting) - 1:
-            isDataSorted = True
-            isCurrentlySortingData = False
+            SetDataSortedBool(1)
+            SetCurrentlySortingDataBool(0)
+            button_functions.GrabDataBools(isDataSorted, isCurrentlySortingData)
             # Highlight the sorted list
-            PerformRainbow("BUBBLE SORT FINISHED!")
+            data.PerformRainbow("BUBBLE SORT FINISHED!", rectangles.currentRectanglesOnScreen, gui.buttonsOnScreen, gui.labelsOnScreen, gui.userInputButton, message_system.messageLabel, gui.currentlyDisplayedMainFrame[0])
             return  
 
         swapped = False
@@ -159,9 +183,10 @@ class SortList:
             values = [listForSorting[i] for i in swappedIndices]
             # Highlight the values being compared
             rectangles.GrabCurrentListToSort(currentListToSort[0])
+            data.GrabCurrentListToSort(currentListToSort[0])
             rectangles.UpdateRectangleFrames(values + swappedIndices)
             # Schedule the next iteration after a delay
-            currentlyDisplayedMainFrame[0].after(400, lambda: self.BubbleSortList(currentIndex))
+            gui.currentlyDisplayedMainFrame[0].after(400, lambda: self.BubbleSortList(currentIndex))
         else:
             # If no swap occurred, directly proceed to the next iteration
             self.BubbleSortList(currentIndex + 1)
@@ -177,7 +202,8 @@ class SortList:
         """
         global isDataSorted, isCurrentlySortingData
 
-        isCurrentlySortingData = True
+        SetCurrentlySortingDataBool(1)
+        button_functions.GrabDataBools(isDataSorted, isCurrentlySortingData)
             
         listForSorting = array.copy()
 
@@ -223,14 +249,17 @@ class SortList:
         self.listToSort = array
         print("self" + str(self.listToSort))
         rectangles.GrabCurrentListToSort(currentListToSort[0])
+        data.GrabCurrentListToSort(currentListToSort[0])
         rectangles.UpdateRectangleFrames([0])
-        isDataSorted = True
-        isCurrentlySortingData = False
+        SetDataSortedBool(1)
+        SetCurrentlySortingDataBool(0)
+        button_functions.GrabDataBools(isDataSorted, isCurrentlySortingData)
+
 
 
     
 
-def CreateIntList(amountOfInts: int, listForInts: list):
+def CreateIntList(amountOfInts: int):
     """ Creates a list of integers, starting at 10
     to the length of amountOfInts, then shuffles the list
     to have an unorganized list to work with
@@ -240,8 +269,8 @@ def CreateIntList(amountOfInts: int, listForInts: list):
             list(listForInts): A list that the integers will be appended to
     """
     global currentListToSort
-    # Clearing the list of ints, if there happens to be any stored information
-    listForInts.clear()
+
+    listForInts = []
     
     # Setting the loop to start at 10
     # 10 was used, to have the rectangles be tall enough to visualize 
@@ -261,6 +290,9 @@ def CreateIntList(amountOfInts: int, listForInts: list):
     listForSorting = SortList(listForInts)
     # Appending the newly created SortList object to the list for the current SortList object
     currentListToSort.append(listForSorting)
+    button_functions.GrabCurrentListToSort(listForSorting)
+    rectangles.GrabCurrentListToSort(listForSorting)
+    data.GrabCurrentListToSort(currentListToSort[0])
     print(currentListToSort[0].listToSort)
         
 

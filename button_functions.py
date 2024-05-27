@@ -1,9 +1,18 @@
 import main
 import gui
 import rectangles as rects
+import data
 from message_system import DisplayMessage as msg
 
 currentListToSort = []
+
+isDataSorted = False
+isDataCurrentlyBeingSorted = False
+
+def GrabDataBools(dataSorted:bool,currentlySorting:bool):
+    global isDataSorted, isDataCurrentlyBeingSorted
+    isDataSorted = dataSorted
+    isDataCurrentlyBeingSorted = currentlySorting
 
 def GrabCurrentListToSort(listToSort):
     global currentListToSort
@@ -15,12 +24,12 @@ def RunSelectionSort():
     """
 
     # If the data is already sorted, prompt the user, return
-    if main.isDataSorted:
+    if isDataSorted:
         msg("RESET DATA BEFORE SORTING")
         return
     # If the data is currently being sorted, prompt the user, return
-    elif main.isCurrentlySortingData:
-        main.msg("WAIT FOR CURRENT ACTION TO FINISH")
+    elif isDataCurrentlyBeingSorted:
+        msg("WAIT FOR CURRENT ACTION TO FINISH")
         return
     # Ready to run selection sort
     msg("RUNNING SELECTION SORT")
@@ -32,11 +41,11 @@ def RunSelectionSort():
 def RunBubbleSort():
     """ Checks if the data is ready to be sorted using a Bubble sort"""
     # If the data is already sorted, prompt the user, return
-    if main.isDataSorted:
+    if isDataSorted:
         msg("RESET DATA BEFORE SORTING")
         return
     # If the data is currently being sorted, prompt the user, return
-    elif main.isCurrentlySortingData:
+    elif isDataCurrentlyBeingSorted:
         msg("WAIT FOR CURRENT ACTION TO FINISH")
         return
     
@@ -48,11 +57,11 @@ def RunBubbleSort():
 def RunMergeSort():
     """ Checks if the data is ready to be sorted using a Merge Sort"""
     # If the data is already sorted, prompt the user, return
-    if main.isDataSorted:
+    if isDataSorted:
         msg("RESET DATA BEFORE SORTING")
         return
     # If the data is currently being sorted, prompt the user, return
-    elif main.isCurrentlySortingData:
+    elif isDataCurrentlyBeingSorted:
         msg("WAIT FOR CURRENT ACTION TO FINISH")
         return
     
@@ -67,14 +76,14 @@ def ResetWithNewData():
     """ Resets the current rectangle data"""
 
     # If the data is currently being sorted, wait to reset
-    if main.isCurrentlySortingData:
+    if isDataCurrentlyBeingSorted:
         msg("WAIT FOR CURRENT ACTION TO FINISH")
         return
-    if not main.isDataSorted:
+    if not isDataSorted:
         msg("SORT DATA BEFORE RESETTING")
         return
     # The data will no longer be sorted once this runs, set to False
-    main.isDataSorted = False
+    main.SetDataSortedBool(0)
     # Clear the list holding the SortList object
     currentListToSort.clear()
     # Clear all the rectangles from the screen
@@ -82,9 +91,9 @@ def ResetWithNewData():
         rect.frame.destroy()
     rects.currentRectanglesOnScreen.clear()
     # Create a new list of ints and a new SortList object
-    main.CreateIntList(60, randomIntList)
+    main.CreateIntList(60)
     # Create new rectangles
-    rects.CreateRectangleFrames()
+    rects.CreateRectangleFrames(gui.currentlyDisplayedMainFrame[0], gui.currentCenterFrame[0])
     
     
 def SearchForValue():
@@ -93,16 +102,16 @@ def SearchForValue():
     a binary search on their value
     """
     # Data is being sorted, alert user, return
-    if main.isCurrentlySortingData:
+    if isDataCurrentlyBeingSorted:
         msg("WAIT FOR CURRENT ACTION TO FINISH")
         return
     # Data is not sorted, alert user, return
-    if not main.isDataSorted:
+    if not isDataSorted:
         msg("SORT DATA BEFORE SEARCH")
         return
     # Check that the input is valid
     try:
-        xValue = int(gui.userInput.get())
+        xValue = int(gui.userInputButton[0].get())
     except ValueError:
         # Input not valid, alert user, return
         msg("Invalid Input")
@@ -110,4 +119,4 @@ def SearchForValue():
     # Made it past all checks, run the binary search
     msg("RUNNING BINARY SEARCH")
     # Running binary search after a 3 second delay, this gives time for the text message to be read before wiping with a new message
-    gui.currentlyDisplayedMainFrame[0].after(100, lambda x=xValue, minV=0, maxV=(len(currentListToSort[0].listToSort)-1): BinarySearch(x, minV, maxV))
+    gui.currentlyDisplayedMainFrame[0].after(100, lambda x=xValue, minV=0, maxV=(len(currentListToSort[0].listToSort)-1): data.BinarySearch(x, minV, maxV))

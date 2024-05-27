@@ -2,9 +2,17 @@ from message_system import DisplayMessage as msg
 from message_system import ClearMessageInput as clrMsg
 from rectangles import UpdateRectangleFrames as rectUpdate
 
+import message_system
+import rectangles
+import gui
+currentListToSort = []
 
+def GrabCurrentListToSort(listToSort):
+    global currentListToSort
+    currentListToSort.clear()
+    currentListToSort.append(listToSort)
 
-def BinarySearch(xValue, minValue, maxValue, currentListToSort:list, mainFrame):
+def BinarySearch(xValue, minValue, maxValue):
     """ Performs a binary search, using the users inputted value as the xValue
     and continusly checks against the min and max value until found
     """
@@ -24,7 +32,7 @@ def BinarySearch(xValue, minValue, maxValue, currentListToSort:list, mainFrame):
         msg(f"VALUE {xValue}, FOUND!")
         # Refresh the rectangles, highlight the value
         rectUpdate([xValue])
-        mainFrame.after(2000, lambda value=xValue:PerformRainbow(f"VALUE {value} FOUND!"))
+        gui.currentlyDisplayedMainFrame[0].after(2000, lambda value=xValue:PerformRainbow(f"VALUE {value} FOUND!", rectangles.currentRectanglesOnScreen, gui.buttonsOnScreen, gui.labelsOnScreen, gui.userInputButton, message_system.messageLabel, gui.currentlyDisplayedMainFrame[0]))
         
     # If the value in the middle is greater than the users inputted value
     elif currentListToSort[0].listToSort[midValue] > xValue:
@@ -32,14 +40,14 @@ def BinarySearch(xValue, minValue, maxValue, currentListToSort:list, mainFrame):
         rectUpdate([minValue, midValue, maxValue])
         msg(f"CHECKING MIN={minValue}, MID={midValue} MAX={maxValue}")
         # Rerun this search after 3 seconds, passing in the same x value, the same minValue but setting the new max value to be the middle value - 1
-        mainFrame.after(2000, lambda x=xValue, minV=minValue, maxV=(midValue - 1), curLi=currentListToSort, frame=mainFrame: BinarySearch(x, minV, maxV, curLi, frame))
+        gui.currentlyDisplayedMainFrame[0].after(2000, lambda x=xValue, minV=minValue, maxV=(midValue - 1): BinarySearch(x, minV, maxV))
     # Else if the middle value is less than the inputted value
     else:
         # Highlight the current minValue and maxValue on the rectangles
         rectUpdate([minValue, midValue, maxValue])
         msg(f"CHECKING MIN={minValue}, MID={midValue}, MAX={maxValue}")
         # Rerun this search after 3 seconds, passing in the same x value, changing the minValue to be the middle value + 1, and using the same maxValue
-        mainFrame.after(2000, lambda x=xValue, minV=(midValue + 1), maxV=maxValue, curLi=currentListToSort, frame=mainFrame: BinarySearch(x, minV, maxV, curLi, frame))
+        gui.currentlyDisplayedMainFrame[0].after(2000, lambda x=xValue, minV=(midValue + 1), maxV=maxValue: BinarySearch(x, minV, maxV))
         
         
         
