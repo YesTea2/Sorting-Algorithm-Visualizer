@@ -15,8 +15,9 @@ An application that displays using different sorting algorithms as well as a bin
     while the sorting is happening, but the merge sort toggles the bools off the second it's clicked instead of when it's finished.
 
 ![alt text](https://github.com/YesTea2/CS162-Project-6/blob/main/Screenshots/Selection2.gif)
-![alt text](https://github.com/YesTea2/CS162-Project-6/blob/main/Screenshots/shot1.png)
+
 ![alt text](https://github.com/YesTea2/CS162-Project-6/blob/main/Screenshots/shot2.png)
 ![alt text](https://github.com/YesTea2/CS162-Project-6/blob/main/Screenshots/shot3.png)
 ![alt text](https://github.com/YesTea2/CS162-Project-6/blob/main/Screenshots/shot4.png)
+Screenshot showing the merge sort working
 ![alt text](https://github.com/YesTea2/CS162-Project-6/blob/main/Screenshots/shot5.png)
