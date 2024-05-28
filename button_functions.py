@@ -1,3 +1,24 @@
+""" button_functions.py - Module containing the logic related to the logic of the buttons
+
+This module contains the information for for what happens when the user clicks any of the buttons
+on the gui
+
+
+This script pools from these custom modules:
+    rectangles.py:
+        A module that contains the logic related to displaying the data to the screen as rectangles
+    message_system.py:
+        A module that contains the logic for a message system used to display what is currently happening to the user
+    gui.py:
+        A module that contains the logic for the gui that is displayed to the user
+    data.py:
+        A module that contains the logic related to creating the data that is manipulated as well as a rainbow effect
+        
+"""
+
+
+
+
 import main
 import gui
 import rectangles as rects
@@ -10,13 +31,32 @@ isDataSorted = False
 isDataCurrentlyBeingSorted = False
 
 def GrabDataBools(dataSorted:bool,currentlySorting:bool):
+    """ The current values for the bools related to isDataSorted
+    and isCurrentlySortingData from the main module are passed in
+    and set to bools inside this script
+    
+        Arguments:
+            bool(dataSorted): The value of isDataSorted from the main.py module
+            bool(currentlySorting): The value of the isCurrentlySortingData from the main.py module
+    """
     global isDataSorted, isDataCurrentlyBeingSorted
+    # Setting isDataSorted to the passed in value of dataSorted
     isDataSorted = dataSorted
+    # Setting isDataCurrentlyBeingSorted to the passed in value of currentlySorting
     isDataCurrentlyBeingSorted = currentlySorting
 
 def GrabCurrentListToSort(listToSort):
+    """ The current SortList object is passed in as an argument 
+    and placed in a list to refrence in
+    the different functions of this module
+    
+        Arguments:
+            SortList(curList): The current SortList object
+    """
     global currentListToSort
+    # Clearing out the list of any SortList objects
     currentListToSort.clear()
+    # Appending the passed in SortList object to the list
     currentListToSort.append(listToSort)
     
 def RunSelectionSort():

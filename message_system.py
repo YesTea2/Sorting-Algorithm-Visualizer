@@ -1,3 +1,14 @@
+""" message_system.py - Module containing the logic related to the message system
+
+This module contains the logic that is used to display messages to the user on the bottom of 
+the screen.
+
+        
+"""
+
+
+
+
 import customtkinter as ctk
 
 curMainFrame = []

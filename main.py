@@ -1,25 +1,51 @@
-""" search_gui.py - An application that runs a binary search along with multiple sorting algorithms
+""" main.py - An application that runs the main logic for an application that shows different sorting algorithms
 
-A user is presented with a GUI where they can sort a list of integers using different sorting methods including Bubble, Selection and Merge(Not implemented yet).
+A user is presented with a GUI where they can sort a list of integers using different sorting methods including Bubble, Selection and Merge.
 As well as search the organized data using a bubble sort to find an inputted value
+
+This script pools from these custom modules:
+    data.py: 
+        A module that contains the logic related to creating the data that is manipulated as well as a rainbow effect
+    rectangles.py:
+        A module that contains the logic related to displaying the data to the screen as rectangles
+    button_functions.py:
+        A module that contains the logic for all of the different buttons the user can interact with
+    message_system.py:
+        A module that contains the logic for a message system used to display what is currently happening to the user
+    gui.py:
+        A module that contains the logic for the gui that is displayed to the user
+        
 
 Name: Joshua Owen
 Class: CS162 Linn-Benton Community College
-Date: 5/20/2024
+Date: 5/27/2024
+
+*** Notes ***
+
+    While the merge sort option does work and will eventually display the data sorted properly, I was unable to find a solution to have it
+    display each step without breaking how the merge sort operates, instead there is a print statement kept inside this function so it can be
+    seen that is, in fact, running a merge sort. 
+    
+    The merge sort also presented a problem with not being able to find a good way to have a coniditon to check when its finished, once you click the merge sort
+    DO NOT CLICK any other buttons until the GUI updates with the sorted data otherwise it will break the application.
+    
+    All of the other sorting options have fail safes to prevent the user from clicking anything while the sorting is happening, but the merge sort toggles the bools off
+    the second its clicked instead of when its finished.
 
 """
 
-# Importing the customTkinter package that enhances tkinter
+# Importing packages
 import customtkinter
 import pytest
 import random
+
+# Importing custom modules
 import gui
 import rectangles
 import message_system
 import data
 import button_functions
 
-# These hold information that is refrenced during runtime
 randomIntList = []
 currentListToSort =[]
 
@@ -35,43 +61,67 @@ def Main():
     """ The main logic that needs to run when the application is loaded, calls all the methods used for displaying the frames, gui elements
     and creates the rectangle data and integer list
     """
-    # Creating a list of ints
+    # Creating a list of ints, this also creates the current SortList object
     CreateIntList(60)
     # Creating the frames
     gui.CreateRootFrame()
     gui.CreateMainFrame()
     gui.CreateCenterFrame()
     gui.CreateMainButtonFrame()
+    # Sending the current SortList object to the rectangles module
     rectangles.GrabCurrentListToSort(currentListToSort[0])
+    # Creating the rectangles for the data
     rectangles.CreateRectangleFrames(gui.currentlyDisplayedMainFrame[0], gui.currentCenterFrame[0])
+    # Creating the frame that displays messages to the user
     message_system.CreateMessageFrame(gui.currentlyDisplayedMainFrame[0])
     # Creating the buttons
     gui.CreateLeftSideMainButtonFrame()
     gui.CreateRightSideMainButtonFrame()
-    # Running a loop that continues to draw the application to the screen until the user closes it
+    # Sending the current SortList object to the button_functions module
     button_functions.GrabCurrentListToSort(currentListToSort[0])
+    # Running a loop that continues to draw the application to the screen until the user closes it
     gui.rootFrame[0].mainloop()
     
 
 
 def SetDataSortedBool(trueOrFalse:int):
+    """ Sets the isDataSorted bool to true or false
+    given the passed in integer value
+    
+        Arguments:
+            int(trueOrFalse): If the int is 0, the bool is toggled false,
+            any other number and its toggled true.
+    """
     global isDataSorted
     
+    # If the arg passed in is 0, set the bool to false
     if trueOrFalse == 0:
         isDataSorted = False
+    # Else set the bool to True
     else:
         isDataSorted = True
         
+    # Sending the updated bools to the button_function script, to update all of the button logic
     button_functions.GrabDataBools(isDataSorted, isCurrentlySortingData)
         
 def SetCurrentlySortingDataBool(trueOrFalse:int):
+    """ Sets the isCurrentlySortingData bool to true or false
+    given the passed in integer value.
+    
+        Arguments:
+            int(trueOrFalse): If the int is 0, the bool is toggled false,
+            any other number and its toggled true.
+    """
     global isCurrentlySortingData
     
+    # If the arg passed in is 0, set the bool to false
     if trueOrFalse == 0:
         isCurrentlySortingData = False
+    # Else set the bool to True
     else:
         isCurrentlySortingData = True
-        
+    
+    # Sending the updated bools to the button_function script, to update all of the button logic
     button_functions.GrabDataBools(isDataSorted, isCurrentlySortingData)
 
 
@@ -96,21 +146,19 @@ class SortList:
         # Grabbing the list from this SortList object
         listForSorting = self.listToSort
 
-        # We are currently sorting the data, toggle bool True
+        # Toggling the isCurrentlySortingData bool to True
         SetCurrentlySortingDataBool(1)
-        button_functions.GrabDataBools(isDataSorted, isCurrentlySortingData)
+
         
         # If the index number is greater or equal to the length of the list, the search is complete
         if number >= len(listForSorting) - 1:
-            # The search is complete, recreate the rectangles without color highlight
-            #UpdateRectangleFrames([0,0])
-            #def PerformRainbow(textToDisplay, currentRectanglesOnScreen:list, buttonsOnScreen:list, labelsOnScreen:list, userInputButton:list, sendMessageLabel: list, mainFrame, index = 0):
+            # The sorting is finished, display the data with a fun rainbow effect
             data.PerformRainbow("SELECTION SORT FINISHED!", rectangles.currentRectanglesOnScreen, gui.buttonsOnScreen, gui.labelsOnScreen, gui.userInputButton, message_system.messageLabel, gui.currentlyDisplayedMainFrame[0])
-            # Reset the sorting data bool
+            # Toggling the isCurrentlySortingData bool to false
             SetCurrentlySortingDataBool(0)
-            # The data is now sorted, set to True
+            # Toggling the isDataSorted bool to True
             SetDataSortedBool(1)
-            button_functions.GrabDataBools(isDataSorted, isCurrentlySortingData)
+
             return  
 
         # Setting the curMin to be the current index
@@ -129,9 +177,11 @@ class SortList:
         listForSorting[number], listForSorting[curMin] = listForSorting[curMin], listForSorting[number]
         
         highlight_values = [listForSorting[index] for index in highlight_indices]
-        # Recreating the rectangles, and highlighting the current rectangles that had been swapped
+
+        # Sending the updated sorted list to both the rectangles module and data module
         rectangles.GrabCurrentListToSort(currentListToSort[0])
         data.GrabCurrentListToSort(currentListToSort[0])
+        # Recreating the rectangles, and highlighting the current rectangles that had been swapped
         rectangles.UpdateRectangleFrames(highlight_values + highlight_indices)
 
         # Recursive loop, runs after 1/2 of a second, recalling this method
@@ -145,16 +195,18 @@ class SortList:
         Arguments:
             int(currentIndex): The current loop index for the recursion
         """
-        global isDataSorted, isCurrentlySortingData
+        # Setting the current list to the liset of this object
         listForSorting = self.listToSort
+        # Toggling the isCurrentlySorting bool to True
         SetCurrentlySortingDataBool(1)
-        button_functions.GrabDataBools(isDataSorted, isCurrentlySortingData)
 
         if currentIndex >= len(listForSorting) - 1:
+            # Toggling the isDataSorted bool to True
             SetDataSortedBool(1)
+            # Toggling the isCurrentlySorted bool to False
             SetCurrentlySortingDataBool(0)
-            button_functions.GrabDataBools(isDataSorted, isCurrentlySortingData)
-            # Highlight the sorted list
+
+            # Display that the bubble sort is finished with a fun rainbow effect
             data.PerformRainbow("BUBBLE SORT FINISHED!", rectangles.currentRectanglesOnScreen, gui.buttonsOnScreen, gui.labelsOnScreen, gui.userInputButton, message_system.messageLabel, gui.currentlyDisplayedMainFrame[0])
             return  
 
@@ -181,9 +233,11 @@ class SortList:
         if swappedIndices:
             # Get the values at swapped indices for visualization
             values = [listForSorting[i] for i in swappedIndices]
-            # Highlight the values being compared
+
+            # Sending the updated list to both the rectangles and data module
             rectangles.GrabCurrentListToSort(currentListToSort[0])
             data.GrabCurrentListToSort(currentListToSort[0])
+            # Highlight the values being compared
             rectangles.UpdateRectangleFrames(values + swappedIndices)
             # Schedule the next iteration after a delay
             gui.currentlyDisplayedMainFrame[0].after(400, lambda: self.BubbleSortList(currentIndex))
@@ -197,30 +251,32 @@ class SortList:
         """ Runs one loop of a merge sort, recursive
 
         Arguments:
-        array (list): The list to be sorted.
-        number (int): This is used as the index count for its recursion.
+            array (list): The list to be sorted.
+            number (int): This is used as the index count for its recursion.
         """
         global isDataSorted, isCurrentlySortingData
 
+        # Toggling the isCurrentlySortingData bool to True
         SetCurrentlySortingDataBool(1)
-        button_functions.GrabDataBools(isDataSorted, isCurrentlySortingData)
-            
+
+        # Making a copy of the passed in array
         listForSorting = array.copy()
 
         print("Sorting:", listForSorting)
         
+        # If the current array from the arguments length is greater than 1
         if len(array) > 1:
 
+            # Dividing the array into halves
             mid = len(array) // 2
             leftHalf = array[:mid]
             rightHalf = array[mid:]
 
-        
+            # Recursively calling MergeSortList on both halves
             self.MergeSortList(leftHalf)
             self.MergeSortList(rightHalf)
             
-
-
+            # Merging the sorted halves
             i = j = k = 0
             while i < len(leftHalf) and j < len(rightHalf):
                 if leftHalf[i] <= rightHalf[j]:  
@@ -230,30 +286,37 @@ class SortList:
                     array[k] = rightHalf[j]
                     j += 1
                 k += 1
-                
 
+            # Adding remaining elements from leftHalf
             while i < len(leftHalf):
                 array[k] = leftHalf[i]
                 i += 1
                 k += 1
 
+            # Adding remaining elements from rightHalf
             while j < len(rightHalf):
                 array[k] = rightHalf[j]
                 j += 1
                 k += 1
             
-            
-
+            # Printing the values in the current array to show its working
             print("Merged:", array)
            
+        # Setting the sorted list to self.listToSort
         self.listToSort = array
+        # Printing the current value of the list to show its working
         print("self" + str(self.listToSort))
+        # Sending the updated list to both the rectangles and data module
         rectangles.GrabCurrentListToSort(currentListToSort[0])
         data.GrabCurrentListToSort(currentListToSort[0])
+        # Updating the rectangle data
         rectangles.UpdateRectangleFrames([0])
+        # Toggling the isDataSorted bool to True
         SetDataSortedBool(1)
+        # Toggling the isCurrentlySortingData bool to False
         SetCurrentlySortingDataBool(0)
-        button_functions.GrabDataBools(isDataSorted, isCurrentlySortingData)
+
+
 
 
 

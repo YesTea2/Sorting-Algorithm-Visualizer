@@ -1,3 +1,17 @@
+""" gui.py - Module containing the logic related to creating the GUI the user is presented with on the screen
+
+This module contains the information for creating the frames, buttons, labels and any other visual element
+that is displayed on the screen other than the rectangle data information.
+
+
+This script pools from these custom modules:
+    button_functions:
+        A module that contains the logic for what happens when the user clicks a button
+        
+"""
+
+
+
 import customtkinter as ctk
 import button_functions as bttns
 

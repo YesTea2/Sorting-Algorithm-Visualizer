@@ -1,3 +1,14 @@
+""" rectangles.py - Module containing the logic related to displayign the data to the screen as rectangles
+
+This module contains the information for displaying the rectangluar data as well as updating the data while performing
+searches and sorts.
+
+""" 
+
+
+
+
+
 import customtkinter as ctk
 
 currentListToSort = []
@@ -14,8 +25,17 @@ class RectangleWithValue:
   
   
 def GrabCurrentListToSort(curList):
+    """ The current SortList object is passed in as an argument 
+    and placed in a list to refrence in
+    the different functions of this module
+    
+        Arguments:
+            SortList(curList): The current SortList object
+    """
     global currentListToSort
+    # Clearing out any SortList objects in the list
     currentListToSort.clear()
+    # Appending the passed in SortList object to the list
     currentListToSort.append(curList)
         
 def CreateRectangleFrames(rectFrame, centerFrame, i=0):
