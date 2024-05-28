@@ -16,9 +16,6 @@ This script pools from these custom modules:
         
 """
 
-
-
-
 import main
 import gui
 import rectangles as rects
@@ -30,11 +27,12 @@ currentListToSort = []
 isDataSorted = False
 isDataCurrentlyBeingSorted = False
 
-def GrabDataBools(dataSorted:bool,currentlySorting:bool):
-    """ The current values for the bools related to isDataSorted
+
+def GrabDataBools(dataSorted: bool, currentlySorting: bool):
+    """The current values for the bools related to isDataSorted
     and isCurrentlySortingData from the main module are passed in
     and set to bools inside this script
-    
+
         Arguments:
             bool(dataSorted): The value of isDataSorted from the main.py module
             bool(currentlySorting): The value of the isCurrentlySortingData from the main.py module
@@ -45,11 +43,12 @@ def GrabDataBools(dataSorted:bool,currentlySorting:bool):
     # Setting isDataCurrentlyBeingSorted to the passed in value of currentlySorting
     isDataCurrentlyBeingSorted = currentlySorting
 
+
 def GrabCurrentListToSort(listToSort):
-    """ The current SortList object is passed in as an argument 
+    """The current SortList object is passed in as an argument
     and placed in a list to refrence in
     the different functions of this module
-    
+
         Arguments:
             SortList(curList): The current SortList object
     """
@@ -58,10 +57,10 @@ def GrabCurrentListToSort(listToSort):
     currentListToSort.clear()
     # Appending the passed in SortList object to the list
     currentListToSort.append(listToSort)
-    
+
+
 def RunSelectionSort():
-    """ Checks if the data is ready to be sorted using a selection sort
-    """
+    """Checks if the data is ready to be sorted using a selection sort"""
 
     # If the data is already sorted, prompt the user, return
     if isDataSorted:
@@ -77,9 +76,9 @@ def RunSelectionSort():
     ##print(currentList.listToSort)
     currentListToSort[0].SelectSortList()
 
-    
+
 def RunBubbleSort():
-    """ Checks if the data is ready to be sorted using a Bubble sort"""
+    """Checks if the data is ready to be sorted using a Bubble sort"""
     # If the data is already sorted, prompt the user, return
     if isDataSorted:
         msg("RESET DATA BEFORE SORTING")
@@ -88,14 +87,15 @@ def RunBubbleSort():
     elif isDataCurrentlyBeingSorted:
         msg("WAIT FOR CURRENT ACTION TO FINISH")
         return
-    
+
     # Ready to run bubble sort
     msg("RUNNING BUBBLE SORT")
     # Run a bubble sort on the current list inside the SortList object
     currentListToSort[0].BubbleSortList()
-    
+
+
 def RunMergeSort():
-    """ Checks if the data is ready to be sorted using a Merge Sort"""
+    """Checks if the data is ready to be sorted using a Merge Sort"""
     # If the data is already sorted, prompt the user, return
     if isDataSorted:
         msg("RESET DATA BEFORE SORTING")
@@ -104,16 +104,15 @@ def RunMergeSort():
     elif isDataCurrentlyBeingSorted:
         msg("WAIT FOR CURRENT ACTION TO FINISH")
         return
-    
+
     # Ready to run bubble sort
     msg("RUNNING MERGE SORT")
     # Run a bubble sort on the current list inside the SortList object
     currentListToSort[0].MergeSortList(currentListToSort[0].listToSort)
 
 
-    
 def ResetWithNewData():
-    """ Resets the current rectangle data"""
+    """Resets the current rectangle data"""
 
     # If the data is currently being sorted, wait to reset
     if isDataCurrentlyBeingSorted:
@@ -133,11 +132,13 @@ def ResetWithNewData():
     # Create a new list of ints and a new SortList object
     main.CreateIntList(60)
     # Create new rectangles
-    rects.CreateRectangleFrames(gui.currentlyDisplayedMainFrame[0], gui.currentCenterFrame[0])
-    
-    
+    rects.CreateRectangleFrames(
+        gui.currentlyDisplayedMainFrame[0], gui.currentCenterFrame[0]
+    )
+
+
 def SearchForValue():
-    """ This is ran when the user clicks to search for a chosen
+    """This is ran when the user clicks to search for a chosen
     value, checking if they need to wait, sort data or if its ok to run
     a binary search on their value
     """
@@ -159,4 +160,9 @@ def SearchForValue():
     # Made it past all checks, run the binary search
     msg("RUNNING BINARY SEARCH")
     # Running binary search after a 3 second delay, this gives time for the text message to be read before wiping with a new message
-    gui.currentlyDisplayedMainFrame[0].after(100, lambda x=xValue, minV=0, maxV=(len(currentListToSort[0].listToSort)-1): data.BinarySearch(x, minV, maxV))
+    gui.currentlyDisplayedMainFrame[0].after(
+        100,
+        lambda x=xValue, minV=0, maxV=(
+            len(currentListToSort[0].listToSort) - 1
+        ): data.BinarySearch(x, minV, maxV),
+    )

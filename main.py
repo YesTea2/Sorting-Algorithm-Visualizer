@@ -47,18 +47,17 @@ import data
 import button_functions
 
 randomIntList = []
-currentListToSort =[]
+currentListToSort = []
 
 
-# Bool toggles to check if there is currently data being sorted, and if the 
+# Bool toggles to check if there is currently data being sorted, and if the
 # data is already sorted (used for checking during binary search)
 isDataSorted = False
 isCurrentlySortingData = False
 
 
-    
 def Main():
-    """ The main logic that needs to run when the application is loaded, calls all the methods used for displaying the frames, gui elements
+    """The main logic that needs to run when the application is loaded, calls all the methods used for displaying the frames, gui elements
     and creates the rectangle data and integer list
     """
     # Creating a list of ints, this also creates the current SortList object
@@ -71,7 +70,9 @@ def Main():
     # Sending the current SortList object to the rectangles module
     rectangles.GrabCurrentListToSort(currentListToSort[0])
     # Creating the rectangles for the data
-    rectangles.CreateRectangleFrames(gui.currentlyDisplayedMainFrame[0], gui.currentCenterFrame[0])
+    rectangles.CreateRectangleFrames(
+        gui.currentlyDisplayedMainFrame[0], gui.currentCenterFrame[0]
+    )
     # Creating the frame that displays messages to the user
     message_system.CreateMessageFrame(gui.currentlyDisplayedMainFrame[0])
     # Creating the buttons
@@ -81,46 +82,46 @@ def Main():
     button_functions.GrabCurrentListToSort(currentListToSort[0])
     # Running a loop that continues to draw the application to the screen until the user closes it
     gui.rootFrame[0].mainloop()
-    
 
 
-def SetDataSortedBool(trueOrFalse:int):
-    """ Sets the isDataSorted bool to true or false
+def SetDataSortedBool(trueOrFalse: int):
+    """Sets the isDataSorted bool to true or false
     given the passed in integer value
-    
+
         Arguments:
             int(trueOrFalse): If the int is 0, the bool is toggled false,
             any other number and its toggled true.
     """
     global isDataSorted
-    
+
     # If the arg passed in is 0, set the bool to false
     if trueOrFalse == 0:
         isDataSorted = False
     # Else set the bool to True
     else:
         isDataSorted = True
-        
+
     # Sending the updated bools to the button_function script, to update all of the button logic
     button_functions.GrabDataBools(isDataSorted, isCurrentlySortingData)
-        
-def SetCurrentlySortingDataBool(trueOrFalse:int):
-    """ Sets the isCurrentlySortingData bool to true or false
+
+
+def SetCurrentlySortingDataBool(trueOrFalse: int):
+    """Sets the isCurrentlySortingData bool to true or false
     given the passed in integer value.
-    
+
         Arguments:
             int(trueOrFalse): If the int is 0, the bool is toggled false,
             any other number and its toggled true.
     """
     global isCurrentlySortingData
-    
+
     # If the arg passed in is 0, set the bool to false
     if trueOrFalse == 0:
         isCurrentlySortingData = False
     # Else set the bool to True
     else:
         isCurrentlySortingData = True
-    
+
     # Sending the updated bools to the button_function script, to update all of the button logic
     button_functions.GrabDataBools(isDataSorted, isCurrentlySortingData)
 
@@ -128,17 +129,17 @@ def SetCurrentlySortingDataBool(trueOrFalse:int):
 class SortList:
     # Initilizing a new SortList class object
     def __init__(self, listToSort):
-        """ The SortList class contains methods for sorting
+        """The SortList class contains methods for sorting
         lists using Bubble Sorting, Merge Sorting (not implemented currently), and Selection Sorting
-        
+
         """
         self.listToSort = listToSort
-        
+
     def SelectSortList(self, number=0):
-        """ Runs one loop of a selection sort, recursive
+        """Runs one loop of a selection sort, recursive
         this method will continue to run itself until its counter has reached
         the length of the list its checking
-        
+
             Arguments:
             int(number): This is used as the index count for its recursion
         """
@@ -149,17 +150,24 @@ class SortList:
         # Toggling the isCurrentlySortingData bool to True
         SetCurrentlySortingDataBool(1)
 
-        
         # If the index number is greater or equal to the length of the list, the search is complete
         if number >= len(listForSorting) - 1:
             # The sorting is finished, display the data with a fun rainbow effect
-            data.PerformRainbow("SELECTION SORT FINISHED!", rectangles.currentRectanglesOnScreen, gui.buttonsOnScreen, gui.labelsOnScreen, gui.userInputButton, message_system.messageLabel, gui.currentlyDisplayedMainFrame[0])
+            data.PerformRainbow(
+                "SELECTION SORT FINISHED!",
+                rectangles.currentRectanglesOnScreen,
+                gui.buttonsOnScreen,
+                gui.labelsOnScreen,
+                gui.userInputButton,
+                message_system.messageLabel,
+                gui.currentlyDisplayedMainFrame[0],
+            )
             # Toggling the isCurrentlySortingData bool to false
             SetCurrentlySortingDataBool(0)
             # Toggling the isDataSorted bool to True
             SetDataSortedBool(1)
 
-            return  
+            return
 
         # Setting the curMin to be the current index
         curMin = number
@@ -174,8 +182,11 @@ class SortList:
         highlight_indices = [number, curMin]
 
         # Swappping the values at the index of number, with the index of curMin, and the index of curMin with the index of number
-        listForSorting[number], listForSorting[curMin] = listForSorting[curMin], listForSorting[number]
-        
+        listForSorting[number], listForSorting[curMin] = (
+            listForSorting[curMin],
+            listForSorting[number],
+        )
+
         highlight_values = [listForSorting[index] for index in highlight_indices]
 
         # Sending the updated sorted list to both the rectangles module and data module
@@ -185,13 +196,15 @@ class SortList:
         rectangles.UpdateRectangleFrames(highlight_values + highlight_indices)
 
         # Recursive loop, runs after 1/2 of a second, recalling this method
-        gui.currentlyDisplayedMainFrame[0].after(150, lambda numToUse=(number+1):self.SelectSortList(numToUse))
-    
+        gui.currentlyDisplayedMainFrame[0].after(
+            150, lambda numToUse=(number + 1): self.SelectSortList(numToUse)
+        )
+
     def BubbleSortList(self, currentIndex=0):
-        """ Runs one loop of a Bubble Sort, recursive
+        """Runs one loop of a Bubble Sort, recursive
         this method will continue to run itself until its counter has reached
         the length of the list its checking
-        
+
         Arguments:
             int(currentIndex): The current loop index for the recursion
         """
@@ -207,14 +220,25 @@ class SortList:
             SetCurrentlySortingDataBool(0)
 
             # Display that the bubble sort is finished with a fun rainbow effect
-            data.PerformRainbow("BUBBLE SORT FINISHED!", rectangles.currentRectanglesOnScreen, gui.buttonsOnScreen, gui.labelsOnScreen, gui.userInputButton, message_system.messageLabel, gui.currentlyDisplayedMainFrame[0])
-            return  
+            data.PerformRainbow(
+                "BUBBLE SORT FINISHED!",
+                rectangles.currentRectanglesOnScreen,
+                gui.buttonsOnScreen,
+                gui.labelsOnScreen,
+                gui.userInputButton,
+                message_system.messageLabel,
+                gui.currentlyDisplayedMainFrame[0],
+            )
+            return
 
         swapped = False
 
         for i in range(0, len(listForSorting) - currentIndex - 1):
             if listForSorting[i] > listForSorting[i + 1]:
-                listForSorting[i], listForSorting[i + 1] = listForSorting[i + 1], listForSorting[i]
+                listForSorting[i], listForSorting[i + 1] = (
+                    listForSorting[i + 1],
+                    listForSorting[i],
+                )
                 swapped = True
 
         if swapped:
@@ -240,15 +264,15 @@ class SortList:
             # Highlight the values being compared
             rectangles.UpdateRectangleFrames(values + swappedIndices)
             # Schedule the next iteration after a delay
-            gui.currentlyDisplayedMainFrame[0].after(400, lambda: self.BubbleSortList(currentIndex))
+            gui.currentlyDisplayedMainFrame[0].after(
+                400, lambda: self.BubbleSortList(currentIndex)
+            )
         else:
             # If no swap occurred, directly proceed to the next iteration
             self.BubbleSortList(currentIndex + 1)
 
-
-        
     def MergeSortList(self, array):
-        """ Runs one loop of a merge sort, recursive
+        """Runs one loop of a merge sort, recursive
 
         Arguments:
             array (list): The list to be sorted.
@@ -263,7 +287,7 @@ class SortList:
         listForSorting = array.copy()
 
         print("Sorting:", listForSorting)
-        
+
         # If the current array from the arguments length is greater than 1
         if len(array) > 1:
 
@@ -275,11 +299,11 @@ class SortList:
             # Recursively calling MergeSortList on both halves
             self.MergeSortList(leftHalf)
             self.MergeSortList(rightHalf)
-            
+
             # Merging the sorted halves
             i = j = k = 0
             while i < len(leftHalf) and j < len(rightHalf):
-                if leftHalf[i] <= rightHalf[j]:  
+                if leftHalf[i] <= rightHalf[j]:
                     array[k] = leftHalf[i]
                     i += 1
                 else:
@@ -298,10 +322,10 @@ class SortList:
                 array[k] = rightHalf[j]
                 j += 1
                 k += 1
-            
+
             # Printing the values in the current array to show its working
             print("Merged:", array)
-           
+
         # Setting the sorted list to self.listToSort
         self.listToSort = array
         # Printing the current value of the list to show its working
@@ -317,16 +341,11 @@ class SortList:
         SetCurrentlySortingDataBool(0)
 
 
-
-
-
-    
-
 def CreateIntList(amountOfInts: int):
-    """ Creates a list of integers, starting at 10
+    """Creates a list of integers, starting at 10
     to the length of amountOfInts, then shuffles the list
     to have an unorganized list to work with
-    
+
         Arguments:
             int(amountOfInts): The amount of integers to create
             list(listForInts): A list that the integers will be appended to
@@ -334,22 +353,22 @@ def CreateIntList(amountOfInts: int):
     global currentListToSort
 
     listForInts = []
-    
+
     # Setting the loop to start at 10
-    # 10 was used, to have the rectangles be tall enough to visualize 
+    # 10 was used, to have the rectangles be tall enough to visualize
     i = 10
     # While the index is less than the amount of ints
     while i < amountOfInts:
         # Append the index to the list of ints
         listForInts.append(i)
         # Increase the value of the index
-        i+= 1
+        i += 1
 
     # Shuffling the list of ints
     random.shuffle(listForInts)
     # Clearing the list that holds the current SortList object
     currentListToSort.clear()
-    # Initilizing a new SortList object, passing in the created list of ints 
+    # Initilizing a new SortList object, passing in the created list of ints
     listForSorting = SortList(listForInts)
     # Appending the newly created SortList object to the list for the current SortList object
     currentListToSort.append(listForSorting)
@@ -357,8 +376,7 @@ def CreateIntList(amountOfInts: int):
     rectangles.GrabCurrentListToSort(listForSorting)
     data.GrabCurrentListToSort(currentListToSort[0])
     print(currentListToSort[0].listToSort)
-        
 
-    
+
 if __name__ == "__main__":
     Main()
