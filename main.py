@@ -23,13 +23,14 @@ Date: 5/27/2024
 
     While the merge sort option does work and will eventually display the data sorted properly, I was unable to find a solution to have it
     display each step without breaking how the merge sort operates, instead there is a print statement kept inside this function so it can be
-    seen that is, in fact, running a merge sort. 
+    seen that it is running a merge sort. 
     
-    The merge sort also presented a problem with not being able to find a good way to have a coniditon to check when its finished, once you click the merge sort
-    DO NOT CLICK any other buttons until the GUI updates with the sorted data otherwise it will break the application.
+    The merge sort also presented a problem with not being able to find a good way to 
+    have a condition to check when it's finished, once you click the merge sort
+    DO NOT CLICK any other buttons until the GUI updates with the sorted data otherwise, it will break the application.
     
-    All of the other sorting options have fail safes to prevent the user from clicking anything while the sorting is happening, but the merge sort toggles the bools off
-    the second its clicked instead of when its finished.
+    All of the other sorting options have fail-safes to prevent the user from clicking anything 
+    while the sorting is happening, but the merge sort toggles the bools off the second it's clicked instead of when it's finished.
 
 """
 
