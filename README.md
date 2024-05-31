@@ -1,11 +1,20 @@
-# CS162-Project-6
-An application that displays using different sorting algorithms as well as a binary search
+# Sorting Algorithm Visualizer - a Python application using CustomTkinter
+
+An application that displays multiple sorting algorithms visually on the screen by manipulating the data of rectangles
+
+This also includes using a Binary Search to look up individual values after sorting the data.
+
+Created for CS162 spring term 2024 at Linn-Benton Community College
+
+Packages needed:
+    CustomTkinter build > 0.3
+    Random 
 
 *** Notes ***
 
     While the merge sort option does work and will eventually display the data sorted properly, I was unable to find a solution to have it
     display each step without breaking how the merge sort operates, instead there is a print statement kept inside this function so it can be
-    seen that is, in fact, running a merge sort. 
+    seen that it is running a merge sort. 
     
     The merge sort also presented a problem with not being able to find a good way to 
     have a condition to check when it's finished, once you click the merge sort
