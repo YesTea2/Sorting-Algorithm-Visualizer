@@ -16,7 +16,6 @@ This script pools from these custom modules:
         A module that contains the logic for the gui that is displayed to the user
         
 
-Name: Joshua Owen
 Class: CS162 Linn-Benton Community College
 Date: 5/27/2024
 
